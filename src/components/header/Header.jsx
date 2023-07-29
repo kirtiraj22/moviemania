@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { SlMenu } from "react-icons/sl";
 import { VscChromeClose } from "react-icons/vsc";
@@ -45,7 +45,6 @@ const Header = () => {
   const searchQueryHandler = (event) => {
     if (event.key === "Enter" && query.length > 0) {
       navigate(`/search/${query}`);
-
       setTimeout(() => {
         setShowSearch(false);
       }, 1000);
@@ -75,7 +74,7 @@ const Header = () => {
     <header className={`header ${mobileMenu ? "mobileView" : ""} ${show}`}>
       <ContentWrapper>
         <div className="logo" onClick={() => navigate("/")}>
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="" />
         </div>
         <ul className="menuItems">
           <li className="menuItem" onClick={() => navigationHandler("movie")}>
@@ -104,7 +103,7 @@ const Header = () => {
             <div className="searchInput">
               <input
                 type="text"
-                placeholder="Search for a movie or TV show..."
+                placeholder="Search for a movie or tv show...."
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyUp={searchQueryHandler}
               />
