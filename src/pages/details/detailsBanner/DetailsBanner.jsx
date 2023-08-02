@@ -11,9 +11,13 @@ import Genres from "../../../components/genres/Genres";
 import CircleRating from "../../../components/circleRating/CircleRating";
 import Img from "../../../components/lazyLoadImage/Img.jsx";
 import PosterFallback from "../../../assets/no-poster.png";
-import { PlayBtn } from "../PlayBtn";
+import { PlayIcon } from "../Playbtn";
+import VideoPopup from "../../../components/videoPopup/VideoPopup";
 
 const DetailsBanner = ({ video, crew }) => {
+  const [show, setShow] = useState(false);
+  const [videoId, setVideoId] = useState(null);
+
   const { mediaType, id } = useParams();
   const { data, loading } = useFetch(`/${mediaType}/${id}`);
 
@@ -61,19 +65,28 @@ const DetailsBanner = ({ video, crew }) => {
                       ).format("YYYY")})`}
                     </div>
                     <div className="subtitle">{data.tagline}</div>
+
                     <Genres data={_genres} />
 
                     <div className="row">
                       <CircleRating rating={data.vote_average.toFixed(1)} />
-                      <div className="playbtn" onClick={() => {}}>
-                        <PlayBtn />
+                      <div
+                        className="playbtn"
+                        onClick={() => {
+                          setShow(true);
+                          setVideoId(video.key);
+                        }}
+                      >
+                        <PlayIcon />
                         <span className="text">Watch Trailer</span>
                       </div>
                     </div>
+
                     <div className="overview">
                       <div className="heading">Overview</div>
                       <div className="description">{data.overview}</div>
                     </div>
+
                     <div className="info">
                       {data.status && (
                         <div className="infoItem">
@@ -98,11 +111,12 @@ const DetailsBanner = ({ video, crew }) => {
                         </div>
                       )}
                     </div>
+
                     {director?.length > 0 && (
                       <div className="info">
                         <span className="text bold">Director: </span>
                         <span className="text">
-                          {director.map((d, i) => (
+                          {director?.map((d, i) => (
                             <span key={i}>
                               {d.name}
                               {director.length - 1 !== i && ", "}
@@ -111,11 +125,12 @@ const DetailsBanner = ({ video, crew }) => {
                         </span>
                       </div>
                     )}
+
                     {writer?.length > 0 && (
                       <div className="info">
                         <span className="text bold">Writer: </span>
                         <span className="text">
-                          {writer.map((d, i) => (
+                          {writer?.map((d, i) => (
                             <span key={i}>
                               {d.name}
                               {writer.length - 1 !== i && ", "}
@@ -124,14 +139,15 @@ const DetailsBanner = ({ video, crew }) => {
                         </span>
                       </div>
                     )}
-                    {data.created_by?.length > 0 && (
+
+                    {data?.created_by?.length > 0 && (
                       <div className="info">
                         <span className="text bold">Creator: </span>
                         <span className="text">
-                          {data.created_by?.map((d, i) => (
+                          {data?.created_by?.map((d, i) => (
                             <span key={i}>
                               {d.name}
-                              {data.created_by?.length - 1 !== i && ", "}
+                              {data?.created_by.length - 1 !== i && ", "}
                             </span>
                           ))}
                         </span>
@@ -139,6 +155,12 @@ const DetailsBanner = ({ video, crew }) => {
                     )}
                   </div>
                 </div>
+                <VideoPopup
+                  show={show}
+                  setShow={setShow}
+                  videoId={videoId}
+                  setVideoId={setVideoId}
+                />
               </ContentWrapper>
             </React.Fragment>
           )}
